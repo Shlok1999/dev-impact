@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="mini-widget" class="mini-container" onclick="toggleExpand()">
+        <div class="mini-content">
+            <span id="mini-carbon">0.00g</span>
+            <span class="mini-divider">|</span>
+            <span id="mini-cpu">0% CPU</span>
+            <span class="mini-expand">↗</span>
+        </div>
+    </div>
+
+    <div id="full-widget" class="widget-container hidden">
+        <div class="header">
+            <div>
+                <span class="title">DevImpact</span>
+                <span id="machine-name" style="font-size: 10px; opacity: 0.6; display: block; letter-spacing: 1px;">-</span>
+            </div>
+            <div class="header-controls">
+                <div class="view-toggle">
+                    <div id="btn-circle" class="toggle-btn active" onclick="setView('circle')">Main</div>
+                    <div id="btn-graph" class="toggle-btn" onclick="setView('graph')">Graph</div>
+                </div>
+                <div class="mini-btn" onclick="toggleExpand()">↙</div>
+            </div>
+        </div>
+
+        <div id="insight-layer" class="insight-bar">
+            <div id="activity" style="font-weight: 800; margin-bottom: 2px;">🟢 Normal development activity</div>
+            <div id="recommendation" style="font-size: 11px; opacity: 0.8;">💡 System running efficiently</div>
+        </div>
+
+        <div id="view-circle" class="view-content">
+            <div class="circular-grid">
+                <div class="gauge-item">
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 100 100">
+                            <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                            <circle id="cpu-gauge" class="gauge-progress" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <div id="cpu-text" class="gauge-value">0%</div>
+                    </div>
+                    <span class="gauge-label">CPU</span>
+                </div>
+                <div class="gauge-item">
+                    <div class="gauge-container">
+                        <svg class="gauge-svg" viewBox="0 0 100 100">
+                            <circle class="gauge-bg" cx="50" cy="50" r="40"></circle>
+                            <circle id="mem-gauge" class="gauge-progress" cx="50" cy="50" r="40"></circle>
+                        </svg>
+                        <div id="mem-text" class="gauge-value">0%</div>
+                    </div>
+                    <span class="gauge-label">Memory</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-graph" class="view-content hidden">
+            <div class="graph-selector">
+                <div id="sub-cpu" class="sub-toggle active" onclick="setGraphType('cpu')">CPU</div>
+                <div id="sub-mem" class="sub-toggle" onclick="setGraphType('mem')">RAM</div>
+            </div>
+            <div class="graph-container">
+                <svg class="graph-svg" id="graph-svg" preserveAspectRatio="none" viewBox="-10 0 115 110">
+                    <defs>
+                        <linearGradient id="cpu-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--color-green);stop-opacity:0.4" />
+                            <stop offset="100%" style="stop-color:var(--color-green);stop-opacity:0" />
+                        </linearGradient>
+                        <linearGradient id="mem-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:var(--color-ice-blue);stop-opacity:0.4" />
+                            <stop offset="100%" style="stop-color:var(--color-ice-blue);stop-opacity:0" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Grid Lines -->
+                    <line class="grid-line" x1="0" y1="25" x2="100" y2="25"></line>
+                    <line class="grid-line" x1="0" y1="50" x2="100" y2="50"></line>
+                    <line class="grid-line" x1="0" y1="75" x2="100" y2="75"></line>
+
+                    <!-- Labels -->
+                    <text x="-5" y="5" class="axis-label" text-anchor="end">100%</text>
+                    <text x="-5" y="50" class="axis-label" text-anchor="end">50%</text>
+                    <text x="-5" y="100" class="axis-label" text-anchor="end">0%</text>
+
+                    <!-- Area Fills -->
+                    <path id="cpu-area" class="graph-area" fill="url(#cpu-gradient)"></path>
+                    <path id="mem-area" class="graph-area" fill="url(#mem-gradient)"></path>
+
+                    <!-- Lines -->
+                    <path id="cpu-path" class="graph-path" stroke="var(--color-green)"></path>
+                    <path id="mem-path" class="graph-path" stroke="var(--color-ice-blue)"></path>
+                    
+                    <!-- Axes -->
+                    <line class="axis" x1="0" y1="0" x2="0" y2="100"></line>
+                    <line class="axis" x1="0" y1="100" x2="100" y2="100"></line>
+                </svg>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-row">
+                <span id="net-in">0 ↓</span>
+                <span id="net-out">0 ↑</span>
+            </div>
+            <div class="footer-row">
+                <span id="cost-val">Cost: ₹0.00</span>
+                <span id="carbon-val">CO2: 0.00g</span>
+            </div>
+            <div class="footer-row total-impact">
+                <span id="total-carbon">Today: 0.00g CO₂</span>
+            </div>
+            <div id="session-container" class="footer-row session-stats hidden">
+                <span id="session-time">Session: 0m</span>
+                <span id="session-impact">Impact: 0.00g</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+
+</html>
