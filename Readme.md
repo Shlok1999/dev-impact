@@ -120,3 +120,46 @@ Beyond just tracking, it provides an intelligence layer on top of it, that tells
 ## Summary
 
 DevImpact follows a pipeline architecture where system metrics are collected in real-time, processed into meaningful insights, stored efficiently using aggregation strategies, and surfaced through a lightweight UI with actionable recommendations.
+
+## 🚀 Quick Start (CLI)
+
+You can now run DevImpact directly from your terminal.
+
+### Installation
+
+```bash
+npm install -g dev-impact
+```
+
+### Usage
+
+**Start Monitoring (Backend + Agent):**
+```bash
+dev-impact start
+```
+
+**Start Everything (Backend + Agent + UI Widget):**
+```bash
+dev-impact start --ui
+```
+
+**Launch UI Widget Only:**
+```bash
+dev-impact ui
+```
+
+---
+
+## 🛠 Setup & Development
+
+### Prerequisites
+- Node.js (v16+)
+- MySQL Server (running on localhost)
+
+### Manual Installation
+1. Clone the repository.
+2. Run the bulk install command:
+   ```bash
+   npm run install-all
+   ```
+3. Ensure MySQL has a database named `infra_observer`.

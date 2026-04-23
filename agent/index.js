@@ -1,9 +1,11 @@
 const os = require("os");
 const si = require("systeminformation");
 const axios = require("axios");
+require('dotenv').config();
 
 const MACHINE_ID = os.hostname();
-const API_URL = "http://localhost:5001/api/v1/metrics";
+const API_PORT = process.env.PORT || 5001;
+const API_URL = `http://localhost:${API_PORT}/api/v1/metrics`;
 
 
 function estimateCost(cpuLoad) {

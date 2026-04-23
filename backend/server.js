@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const mysql = require("mysql2/promise");
+require('dotenv').config();
 const { detectActivity, getRecommendation } = require("./services/intelligence");
 
 const app = express();
@@ -9,10 +10,10 @@ app.use(express.json());
 
 // Database pool
 const pool = mysql.createPool({
-    host: "localhost",
-    user: "root",
-    password: "",
-    database: "infra_observer",
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASSWORD || "",
+    database: process.env.DB_NAME || "infra_observer",
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0
@@ -188,4 +189,4 @@ app.get("/machines", async (req, res) => {
     }
 });
 
-app.listen(5001, () => console.log("Server started on port 5001"));
+const PORT = process.env.PORT || 5001; app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

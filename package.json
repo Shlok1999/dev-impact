@@ -1,0 +1,28 @@
+{
+  "name": "dev-impact",
+  "version": "1.0.0",
+  "description": "A lightweight infrastructure monitoring tool with a visual desktop widget.",
+  "main": "index.js",
+  "bin": {
+    "dev-impact": "bin/cli.js"
+  },
+  "scripts": {
+    "start": "node bin/cli.js start",
+    "install-all": "npm install && cd agent && npm install && cd ../backend && npm install && cd ../widget && npm install"
+  },
+  "keywords": [
+    "monitoring",
+    "infrastructure",
+    "electron",
+    "metrics",
+    "developer-tools"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "commander": "^11.1.0",
+    "chalk": "^4.1.2",
+    "dotenv": "^16.4.5"
+  }
+}

@@ -101,7 +101,8 @@ function updateGraph() {
 
 async function fetchMetrics() {
     try {
-        const res = await fetch(`http://localhost:5001/api/v1/metrics?machine_id=${machine_id}`);
+const API_PORT = process.env.PORT || 5001;
+        const res = await fetch(`http://localhost:${API_PORT}/api/v1/metrics?machine_id=${machine_id}`);
         const data = await res.json();
         const latest = data[0];
 
@@ -141,7 +142,8 @@ async function fetchMetrics() {
 
 async function fetchSummary() {
     try {
-        const res = await fetch("http://localhost:5001/api/v1/summary");
+const API_PORT = process.env.PORT || 5001;
+        const res = await fetch(`http://localhost:${API_PORT}/api/v1/summary`);
         const data = await res.json();
 
         const totalCarbonGrams = (data.total_carbon || 0) * 1000;
