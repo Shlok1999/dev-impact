@@ -1,6 +1,6 @@
 {
   "name": "dev-impact",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Real-time developer observability with cost and carbon insights",
   "main": "index.js",
   "bin": {
