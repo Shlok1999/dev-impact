@@ -21,9 +21,9 @@ program
   .option('-u, --ui', 'Also launch the desktop widget')
   .action((options) => {
     console.log(chalk.bold.green('\n🚀 Starting DevImpact services...\n'));
-    
+
     const rootDir = path.resolve(__dirname, '..');
-    
+
     const env = {
       ...process.env,
       PORT: options.port,
@@ -34,24 +34,24 @@ program
     };
 
     const commands = [
-      { 
-        command: `node ${path.join(rootDir, 'backend/server.js')}`, 
-        name: 'backend', 
+      {
+        command: `node ${path.join(rootDir, 'backend/server.js')}`,
+        name: 'backend',
         prefixColor: 'blue',
         env: env
       },
-      { 
-        command: `node ${path.join(rootDir, 'agent/index.js')}`, 
-        name: 'agent', 
+      {
+        command: `node ${path.join(rootDir, 'agent/index.js')}`,
+        name: 'agent',
         prefixColor: 'magenta',
         env: env
       }
     ];
 
     if (options.ui) {
-      commands.push({ 
-        command: 'npm start', 
-        name: 'widget', 
+      commands.push({
+        command: 'npm start',
+        name: 'widget',
         prefixColor: 'yellow',
         cwd: path.join(rootDir, 'widget'),
         env: env
@@ -75,15 +75,19 @@ program
   .action(() => {
     const rootDir = path.resolve(__dirname, '..');
     console.log(chalk.bold.yellow('\n🖥️ Launching DevImpact Widget...\n'));
-    
+
     concurrently([
-      { 
-        command: 'npm start', 
-        name: 'widget', 
+      {
+        command: 'npm start',
+        name: 'widget',
         prefixColor: 'yellow',
         cwd: path.join(rootDir, 'widget')
       }
     ]);
   });
+
+if (!process.argv.slice(2).length) {
+  process.argv.push("start", "--ui");
+}
 
 program.parse();
