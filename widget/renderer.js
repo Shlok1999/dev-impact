@@ -41,6 +41,11 @@ function toggleExpand() {
     }
 }
 
+function closeWidget(event) {
+    if (event) event.stopPropagation();
+    ipcRenderer.send('close-app');
+}
+
 function setGraphType(type) {
     currentGraphType = type;
     document.getElementById('sub-cpu').classList.toggle('active', type === 'cpu');

@@ -45,4 +45,8 @@ ipcMain.on('resize-window', (event, { expanded }) => {
     }
 });
 
+ipcMain.on('close-app', () => {
+    app.quit();
+});
+
 app.whenReady().then(createWindow)
