@@ -1,9 +1,18 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-const { concurrently } = require('concurrently');
 const path = require('path');
-const chalk = require('chalk');
+const { spawn } = require('child_process');
+const { startServer } = require('../backend/server');
+const { startAgent } = require('../agent/index');
+
+process.on('uncaughtException', (err) => {
+  console.error("❌ Uncaught Error:", err);
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error("❌ Promise Rejection:", err);
+});
 
 program
   .name('dev-impact')
@@ -14,76 +23,50 @@ program
   .command('start')
   .description('Start the monitoring backend and agent')
   .option('-p, --port <number>', 'Port for the backend API', '5001')
-  .option('--db-host <host>', 'MySQL database host', 'localhost')
-  .option('--db-user <user>', 'MySQL database user', 'root')
-  .option('--db-pass <password>', 'MySQL database password', '')
-  .option('--db-name <name>', 'MySQL database name', 'infra_observer')
   .option('-u, --ui', 'Also launch the desktop widget')
   .action((options) => {
-    console.log(chalk.bold.green('\n🚀 Starting DevImpact services...\n'));
+    console.log("\n🚀 Starting DevImpact...\n");
 
-    const rootDir = path.resolve(__dirname, '..');
+    // Start agent
+    startAgent();
 
-    const env = {
-      ...process.env,
-      PORT: options.port,
-      DB_HOST: options.db_host,
-      DB_USER: options.db_user,
-      DB_PASSWORD: options.db_pass,
-      DB_NAME: options.db_name
-    };
+    console.log("🧠 Intelligence engine active");
 
-    const commands = [
-      {
-        command: `node ${path.join(rootDir, 'backend/server.js')}`,
-        name: 'backend',
-        prefixColor: 'blue',
-        env: env
-      },
-      {
-        command: `node ${path.join(rootDir, 'agent/index.js')}`,
-        name: 'agent',
-        prefixColor: 'magenta',
-        env: env
-      }
-    ];
+    // Start backend internally
+    startServer(options.port || 5001);
 
+    // Launch UI (optional but auto-launch by default empty args)
     if (options.ui) {
-      commands.push({
-        command: 'npm start',
-        name: 'widget',
-        prefixColor: 'yellow',
-        cwd: path.join(rootDir, 'widget'),
-        env: env
+      const rootDir = path.resolve(__dirname, '..');
+      const widgetDir = path.join(rootDir, 'widget');
+      
+      const widgetProcess = spawn('npm', ['start'], {
+          cwd: widgetDir,
+          stdio: 'ignore',
+          detached: true
       });
+      widgetProcess.unref();
+
+      console.log("🖥️ Widget launched");
     }
 
-    const { result } = concurrently(commands, {
-      prefix: 'name',
-      killOthers: ['failure'],
-      restartTries: 3,
-    });
-
-    result.catch((err) => {
-      console.error(chalk.bold.red('\n❌ A service stopped unexpectedly.\n'));
-    });
+    console.log("\n✨ DevImpact is running!\n");
   });
 
 program
   .command('ui')
-  .description('Launch the desktop widget (requires backend to be running)')
+  .description('Launch the desktop widget')
   .action(() => {
     const rootDir = path.resolve(__dirname, '..');
-    console.log(chalk.bold.yellow('\n🖥️ Launching DevImpact Widget...\n'));
-
-    concurrently([
-      {
-        command: 'npm start',
-        name: 'widget',
-        prefixColor: 'yellow',
-        cwd: path.join(rootDir, 'widget')
-      }
-    ]);
+    const widgetDir = path.join(rootDir, 'widget');
+    console.log('\n🖥️ Launching DevImpact Widget...\n');
+    
+    const widgetProcess = spawn('npm', ['start'], {
+        cwd: widgetDir,
+        stdio: 'ignore',
+        detached: true
+    });
+    widgetProcess.unref();
   });
 
 if (!process.argv.slice(2).length) {

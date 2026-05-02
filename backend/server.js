@@ -12,7 +12,7 @@ app.use(express.json());
 const db = new Database('infra_observer.db');
 db.pragma('journal_mode = WAL');
 
-async function initDB() {
+function initDB() {
     try {
         db.exec(`CREATE TABLE IF NOT EXISTS metrics (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -46,13 +46,10 @@ async function initDB() {
             total_carbon FLOAT,
             data_points_count INT
         )`);
-
-        console.log("Connected to SQLite Database and Tables ensured");
     } catch (err) {
         console.error("Database initialization failed:", err.message);
     }
 }
-initDB();
 
 function summarizeAndPrune() {
     const cutoff = Date.now() - (60 * 60 * 1000); // 1 hour ago
@@ -182,4 +179,11 @@ app.get("/machines", async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5001; app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+function startServer(port = 5001) {
+    initDB();
+    app.listen(port, () => {
+        console.log(`🟢 Backend running on port ${port}`);
+    });
+}
+
+module.exports = { startServer };

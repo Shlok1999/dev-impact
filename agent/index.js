@@ -58,4 +58,9 @@ async function sendMetrics() {
 
 }
 
-setInterval(sendMetrics, 5000);
+function startAgent() {
+    setInterval(sendMetrics, 5000);
+    console.log("📊 Agent started");
+}
+
+module.exports = { startAgent };
