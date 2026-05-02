@@ -1,5 +1,5 @@
 CREATE TABLE metrics (
-  id SERIAL PRIMARY KEY,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
   machine_id TEXT,
   timestamp BIGINT,
   cpu FLOAT,
