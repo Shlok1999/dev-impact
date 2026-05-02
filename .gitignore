@@ -10,3 +10,6 @@ package-lock.json
 *.local
 out/
 obj/
+backend/infra_observer.db
+backend/infra_observer.db-wal
+backend/infra_observer.db-shm
